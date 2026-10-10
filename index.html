@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Limbus Company Gift Tracker — track your gifts with draggable checklists." />
+  <title>Keep — Notes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ===== TOP BAR ===== -->
+  <header class="topbar" id="topbar">
+    <div class="topbar__left">
+      <div class="topbar__logo">
+        <span class="topbar__title">Limbus Gifts</span>
+      </div>
+    </div>
+    <div class="topbar__right" style="margin-left: auto; display: flex; align-items: center; gap: 16px;">
+      <div style="display: flex; align-items: center; gap: 8px; color: var(--text-secondary);" title="Adjust Text Size">
+        <span class="material-icons-outlined" style="font-size:16px;">text_decrease</span>
+        <input type="range" id="textSizeSlider" min="0.8" max="1.6" step="0.1" value="1" style="width: 80px; accent-color: var(--text-primary); cursor: pointer;" />
+        <span class="material-icons-outlined" style="font-size:22px;">text_increase</span>
+      </div>
+      <button class="btn-text" id="resetBtn" title="Reset all gifts">Reset All</button>
+    </div>
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main" id="mainContent">
+    <!-- Note input area -->
+    <div class="note-input-area" id="noteInputArea">
+      <div class="note-input-collapsed" id="noteInputCollapsed">
+        <span class="note-input-placeholder">Take a note…</span>
+      </div>
+      <div class="note-input-expanded hidden" id="noteInputExpanded">
+        <input type="text" class="note-input__title" id="noteTitle" placeholder="Title" />
+        <div class="note-input__body" id="noteBody" contenteditable="true" data-placeholder="Take a note…"></div>
+        <div class="note-input__toolbar">
+          <div class="note-input__tools">
+            <button class="icon-btn small" data-action="palette" title="Background options"><span class="material-icons-outlined">palette</span></button>
+          </div>
+          <button class="btn-text" id="noteCloseBtn">Close</button>
+        </div>
+        <div class="color-picker hidden" id="inputColorPicker">
+          <div class="color-picker__row">
+            <button class="color-dot" data-color="default" title="Default" style="background:transparent;border:2px solid var(--text-secondary)"><span class="material-icons-outlined" style="font-size:18px">format_color_reset</span></button>
+            <button class="color-dot" data-color="#DC143C" title="Crimson (Burn)" style="background:#DC143C"></button>
+            <button class="color-dot" data-color="#FF8C00" title="Orange (Bleed)" style="background:#FF8C00"></button>
+            <button class="color-dot" data-color="#FFBF00" title="Amber (Tremor)" style="background:#FFBF00"></button>
+            <button class="color-dot" data-color="#009E60" title="Shamrock (Rupture)" style="background:#009E60"></button>
+            <button class="color-dot" data-color="#007FFF" title="Azure (Sinking)" style="background:#007FFF"></button>
+            <button class="color-dot" data-color="#4169E1" title="Royal Blue (Poise)" style="background:#4169E1"></button>
+            <button class="color-dot" data-color="#8F00FF" title="Violet (Charge)" style="background:#8F00FF"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notes grid -->
+    <div class="notes-grid" id="notesGrid"></div>
+
+    <!-- Empty state -->
+    <div class="empty-state hidden" id="emptyState">
+      <span class="material-icons-outlined empty-state__icon">lightbulb</span>
+      <p class="empty-state__text">Notes you add appear here</p>
+    </div>
+  </main>
+
+  <!-- ===== NOTE EDIT MODAL ===== -->
+  <div class="modal-overlay hidden" id="modalOverlay">
+    <div class="modal-note" id="modalNote">
+      <input type="text" class="modal-note__title" id="modalTitle" placeholder="Title" />
+      <div class="modal-note__body" id="modalBody" contenteditable="true" data-placeholder="Note"></div>
+      <!-- Checklist items rendered here -->
+      <div class="modal-checklist" id="modalChecklist"></div>
+      <div class="modal-note__meta" id="modalMeta"></div>
+      <div class="modal-note__toolbar">
+        <div class="note-input__tools">
+          <button class="icon-btn small" data-modal-action="palette" title="Background options"><span class="material-icons-outlined">palette</span></button>
+          <button class="icon-btn small" data-modal-action="delete" title="Delete note"><span class="material-icons-outlined">delete</span></button>
+        </div>
+        <button class="btn-text" id="modalCloseBtn">Close</button>
+      </div>
+      <div class="color-picker hidden" id="modalColorPicker">
+        <div class="color-picker__row">
+          <button class="color-dot" data-color="default" title="Default" style="background:transparent;border:2px solid var(--text-secondary)"><span class="material-icons-outlined" style="font-size:18px">format_color_reset</span></button>
+          <button class="color-dot" data-color="#DC143C" title="Crimson (Burn)" style="background:#DC143C"></button>
+          <button class="color-dot" data-color="#FF8C00" title="Orange (Bleed)" style="background:#FF8C00"></button>
+          <button class="color-dot" data-color="#FFBF00" title="Amber (Tremor)" style="background:#FFBF00"></button>
+          <button class="color-dot" data-color="#009E60" title="Shamrock (Rupture)" style="background:#009E60"></button>
+          <button class="color-dot" data-color="#007FFF" title="Azure (Sinking)" style="background:#007FFF"></button>
+          <button class="color-dot" data-color="#4169E1" title="Royal Blue (Poise)" style="background:#4169E1"></button>
+          <button class="color-dot" data-color="#8F00FF" title="Violet (Charge)" style="background:#8F00FF"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drop indicator -->
+  <div class="drop-indicator hidden" id="dropIndicator"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
